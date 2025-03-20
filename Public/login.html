@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CineApp - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="contenedor">
+        <div class="form-box">
+            <!-- Formulario Login -->
+            <form id="formLogin" class="form">
+                <h2>Iniciar Sesión</h2>
+                <input type="text" placeholder="Usuario" id="username" required>
+                <input type="password" placeholder="Contraseña" id="password" required>
+                <button type="submit">Entrar</button>
+                <p class="enlace">¿No tienes cuenta? <a href="#" id="mostrarRegistro">Regístrate</a></p>
+            </form>
+
+            <!-- Formulario Registro -->
+            <form id="formRegistro" class="form" style="display: none;">
+                <h2>Crear Cuenta</h2>
+                <input type="text" placeholder="Usuario" id="newUsername" required>
+                <input type="password" placeholder="Contraseña" id="newPassword" required>
+                <button type="submit">Registrar</button>
+                <p class="enlace">¿Ya tienes cuenta? <a href="#" id="mostrarLogin">Iniciar Sesión</a></p>
+            </form>
+
+            <div id="mensaje"></div>
+        </div>
+    </div>
+
+    <script>
+        // Cambiar entre formularios
+        document.getElementById('mostrarRegistro').addEventListener('click', () => {
+            document.getElementById('formLogin').style.display = 'none';
+            document.getElementById('formRegistro').style.display = 'block';
+        });
+
+        document.getElementById('mostrarLogin').addEventListener('click', () => {
+            document.getElementById('formRegistro').style.display = 'none';
+            document.getElementById('formLogin').style.display = 'block';
+        });
+
+        // Manejar Login
+        document.getElementById('formLogin').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const respuesta = await fetch('http://localhost:3000/api/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value
+                })
+            });
+
+            const resultado = await respuesta.json();
+            mostrarMensaje(resultado.token ? '✅ Login exitoso' : '❌ Error: ' + resultado.error);
+        });
+
+        // Manejar Registro
+        document.getElementById('formRegistro').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const respuesta = await fetch('http://localhost:3000/api/registro', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: document.getElementById('newUsername').value,
+                    password: document.getElementById('newPassword').value
+                })
+            });
+
+            const resultado = await respuesta.json();
+            mostrarMensaje(resultado.message ? '🎉 ' + resultado.message : '❌ ' + resultado.error);
+        });
+
+        function mostrarMensaje(texto) {
+            const mensaje = document.getElementById('mensaje');
+            mensaje.textContent = texto;
+            mensaje.style.display = 'block';
+            setTimeout(() => mensaje.style.display = 'none', 3000);
+        }
+    </script>
+</body>
+</html>

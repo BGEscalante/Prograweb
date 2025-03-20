@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineApp - Panel Admin</title>
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Íconos -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="grey lighten-3">
+    <!-- Navbar -->
+    <nav class="blue darken-3">
+        <div class="nav-wrapper container">
+            <a href="/index" class="brand-logo">CineApp</a>
+            <ul class="right">
+                <li><a href="/index"><i class="material-icons">home</i></a></li>
+                <li><a id="logoutBtn"><i class="material-icons">exit_to_app</i></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container">
+        <div class="card-panel white z-depth-2" style="margin-top: 2rem;">
+            <h4 class="center-align blue-text text-darken-3"><i class="material-icons">admin_panel_settings</i> Panel de Administrador</h4>
+            
+            <!-- Tabs para Gestión -->
+            <div class="row">
+                <div class="col s12">
+                    <ul class="tabs blue darken-3">
+                        <li class="tab col s4"><a class="white-text" href="#gestion-salas">Salas</a></li>
+                        <li class="tab col s4"><a class="white-text" href="#gestion-peliculas">Películas</a></li>
+                        <li class="tab col s4"><a class="white-text" href="#gestion-usuarios">Usuarios</a></li>
+                    </ul>
+                </div>
+
+                <!-- Gestión de Salas -->
+                <div id="gestion-salas" class="col s12">
+                    <div class="row">
+                        <form class="col s12" id="formSala">
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <input id="nombreSala" type="text" class="validate">
+                                    <label for="nombreSala">Nombre de la Sala</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input id="capacidad" type="number" class="validate">
+                                    <label for="capacidad">Capacidad (Ej: 50)</label>
+                                </div>
+                            </div>
+                            <button class="btn waves-effect blue darken-3" type="submit">
+                                <i class="material-icons left">add</i>Crear Sala
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Gestión de Películas -->
+                <div id="gestion-peliculas" class="col s12">
+                    <div class="row">
+                        <form class="col s12" id="formPelicula">
+                            <div class="input-field col s12">
+                                <input id="nombrePelicula" type="text" class="validate">
+                                <label for="nombrePelicula">Nombre de la Película</label>
+                            </div>
+                            <button class="btn waves-effect blue darken-3">
+                                <i class="material-icons left">movie</i>Agregar Película
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Gestión de Usuarios -->
+                <div id="gestion-usuarios" class="col s12">
+                    <table class="highlight responsive-table">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Tipo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaUsuarios">
+                            <!-- Datos dinámicos desde JS -->
+                            <tr>
+                                <td>user_test</td>
+                                <td>Cliente</td>
+                                <td>
+                                    <a class="btn-floating red"><i class="material-icons">delete</i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        // Inicializar tabs
+        document.addEventListener('DOMContentLoaded', function() {
+            var tabs = document.querySelectorAll('.tabs');
+            M.Tabs.init(tabs);
+        });
+    </script>
+</body>
+</html>

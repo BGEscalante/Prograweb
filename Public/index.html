@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineApp - Salas</title>
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Íconos de Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="blue darken-3">
+        <div class="nav-wrapper container">
+            <a href="#" class="brand-logo">CineApp</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="admin.html">Admin</a></li>
+                <li><a id="logoutBtn">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container">
+        <h4 class="center-align">Salas Disponibles</h4>
+        
+        <!-- Grid de Salas -->
+        <div class="row" id="salasContainer">
+            <!-- Ejemplo de Tarjeta de Sala -->
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://via.placeholder.com/300x200">
+                        <span class="card-title">Sala 1: Avengers</span>
+                    </div>
+                    <div class="card-content">
+                        <p>Asientos disponibles: 50</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="asientos.html" class="blue-text">Reservar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

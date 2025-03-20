@@ -1,0 +1,147 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedor {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.form-box {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.enlace {
+    text-align: center;
+    margin-top: 15px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#mensaje {
+    display: none;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 4px;
+    text-align: center;
+    background: #d4edda;
+    color: #155724;
+}
+
+#mensaje.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Estilos para el Grid de Asientos */
+.asientos-container {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.asiento {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.asiento.disponible {
+    background: #4CAF50; /* Verde */
+    color: white;
+}
+
+.asiento.reservado {
+    background: #f44336; /* Rojo */
+    cursor: not-allowed;
+}
+
+.asiento.seleccionado {
+    background: #2196F3; /* Azul */
+    color: white;
+}
+
+/* Ajustes para Tarjetas */
+.card .card-image img {
+    height: 200px;
+    object-fit: cover;
+}
+/* Estilos específicos para admin */
+.tabs .tab a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.tabs .indicator {
+    background-color: #fff;
+}
+
+/* Tablas responsivas */
+.responsive-table {
+    overflow-x: auto;
+}
+
+/* Botones de acción */
+.btn-floating {
+    margin: 0 5px;
+}
+
+/* Card Panel */
+.card-panel {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
