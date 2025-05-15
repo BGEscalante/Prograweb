@@ -2,20 +2,20 @@ const db = require('../Conexion/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const JWT_SECRET = process.env.JWT_SECRET; 
+
 // Registro
 const registroUser = async (req, res) => {
   try {
     const { username, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    
+    const hashed = await bcrypt.hash(password, 10);
     await db.query(
-      'INSERT INTO usuarios (username, password_hash) VALUES (?, ?)',
-      [username, hashedPassword]
+      'INSERT INTO Usuarios (username, password_hash) VALUES (?, ?)',
+      [username, hashed]
     );
-    
     res.status(201).json({ message: 'Usuario creado exitosamente' });
-    
-  } catch (error) {
+  } catch (err) {
+    console.error('registroUser:', err);
     res.status(500).json({ error: 'Error al crear usuario' });
   }
 };
@@ -23,50 +23,29 @@ const registroUser = async (req, res) => {
 // Login
 const loginUser = async (req, res) => {
   try {
-      const { username, password } = req.body;
-
-      //Buscar usuario
-      const [users] = await db.query(
-          'SELECT * FROM usuarios WHERE username = ?',
-          [username]
-      );
-
-      if (users.length === 0) {
-          return res.status(401).json({ 
-              success: false,
-              error: 'Usuario no encontrado' 
-          });
-      }
-
-      const user = users[0];
-
-      //Comparar contraseñas
-      const validPassword = await bcrypt.compare(password, user.password_hash);
-      if (!validPassword) {
-          return res.status(401).json({ 
-              success: false,
-              error: 'Contraseña incorrecta' 
-          });
-      }
-
-      //JWT
-      const token = jwt.sign(
-          { id: user.id },
-          'tu_clave_secreta_jwt', 
-          { expiresIn: '1h' }
-      );
-      res.json({ 
-          success: true,
-          token: token,
-          message: '¡Bienvenido ' + user.username + '!' 
-      });
-
-  } catch (error) {
-      console.error('Error en login:', error);
-      res.status(500).json({ 
-          success: false,
-          error: 'Error en el servidor' 
-      });
+    const { username, password } = req.body;
+    const [rows] = await db.query(
+      'SELECT * FROM Usuarios WHERE username = ?',
+      [username]
+    );
+    if (rows.length === 0) {
+      return res.status(401).json({ error: 'Usuario no encontrado' });
+    }
+    const user = rows[0];
+    const valid = await bcrypt.compare(password, user.password_hash);
+    if (!valid) {
+      return res.status(401).json({ error: 'Contraseña incorrecta' });
+    }
+    // Firma token con id y tipo
+    const token = jwt.sign(
+      { id: user.id, tipo: user.tipo },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+    res.json({ token, message: `¡Bienvenido ${user.username}!` });
+  } catch (err) {
+    console.error('loginUser:', err);
+    res.status(500).json({ error: 'Error en el servidor' });
   }
 };
 
