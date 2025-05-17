@@ -1,27 +1,44 @@
-
-import { useEffect, useState } from 'react';
+// src/Componentes/Peliculas.jsx
+import React, { useEffect, useState } from 'react';
+import { Box, Card, CardContent, CardMedia, Typography, Grid } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import API from '../api';
+import './ClienteDashboard.css';
+
 
 export default function Peliculas() {
-  const [pelis, setPelis] = useState([]);
+  const [salas, setSalas] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    API.get('/salas') 
-       .then(res => setPelis(res.data))
-       .catch(()=>alert('Error al cargar datos'));
+    API.get('/salas')
+      .then(res => setSalas(res.data))
+      .catch(() => console.error('Error al obtener salas'));
   }, []);
 
   return (
     <div>
-      <h3>Películas disponibles</h3>
-      <ul>
-        {pelis.map(p => (
-          <li key={p.id}>
-            <img src={p.pelicula_imagen_url} alt={p.pelicula_nombre} width="80"/>
-            <strong>{p.pelicula_nombre}</strong>
-          </li>
+      <h2 className="section-title">Salas Disponibles</h2>
+      <div className="peliculas-grid">
+        {salas.map(s => (
+          <div 
+            key={s.id} 
+            className="pelicula-card"
+            onClick={() => navigate(`/cliente/reservar/${s.id}`)}
+          >
+            <img 
+              src={s.pelicula_imagen_url} 
+              className="pelicula-image"
+              alt={s.pelicula_nombre}
+            />
+            <div className="pelicula-content">
+              <h3>{s.pelicula_nombre}</h3>
+              <p>Sala: {s.sala_nombre}</p>
+              <p>Asientos disponibles: {s.disponibles}</p>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
