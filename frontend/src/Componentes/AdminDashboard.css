@@ -1,0 +1,458 @@
+.admin-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+    background: #f8fafc;
+    overflow-x: hidden; 
+  }
+  
+  .admin-sidebar {
+    background: #1e293b;
+    padding: 2rem;
+    position: fixed;
+    width: 280px;
+    height: 100vh;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+  }
+  
+  .admin-main {
+    padding: 2rem;
+    margin-left: 280px;
+    width: calc(100vw - 280px); 
+    max-width: none; 
+  }
+  
+  .admin-title {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    justify-content: center;
+  }
+  
+  .admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .nav-button {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-button:hover {
+    background: #334155;
+    color: #fff;
+  }
+  
+  .nav-button.active {
+    background: #3b82f6;
+    color: #fff;
+  }
+  
+  .logout-link {
+    color: #94a3b8;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    position: absolute;
+    bottom: 2rem;
+    transition: color 0.3s ease;
+  }
+  
+  .logout-link:hover {
+    color: #fff;
+  }
+  
+  .dashboard-content {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .admin-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .admin-sidebar {
+      position: static;
+      width: 100%;
+      height: auto;
+      padding: 1.5rem;
+    }
+    
+    .admin-main {
+      margin-left: 0;
+      width: 100%;
+      padding: 1.5rem;
+    }
+    
+    .nav-button {
+      font-size: 0.9rem;
+      padding: 0.8rem;
+    }
+    
+    .logout-link {
+      position: static;
+      margin-top: 1.5rem;
+    }
+  }
+
+  .gestion-section {
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .grid-container {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  
+  .card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  }
+  
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .buton-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .stats-badge {
+    background: #e2e8f0;
+    color: #1e293b;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+  }
+  
+  
+  
+  /* Estilos específicos para películas */
+  .peliculas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+  
+  .pelicula-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+  
+  .poster-container {
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+  }
+  
+  .pelicula-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 1rem;
+  }
+
+  .pelicula-content {
+    padding: 1rem;
+    text-align: center;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .pelicula-card:hover .pelicula-poster {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    .peliculas-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    
+    .poster-container {
+      height: 250px;
+    }
+  }
+  
+  @media (min-width: 1600px) {
+    .peliculas-grid {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+  }
+
+  /* Estilos generales para formularios */
+  .gestion-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .form-field {
+    width: 100%;
+    min-width: 200px;
+  }
+  
+  /* Tarjetas de salas */
+.salas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+
+  .sala-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+  
+  .sala-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .sala-image-container {
+    height: 200px;
+    background: #f8fafc;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sala-image {
+    max-width: 100%;
+    max-height: 100%;
+    padding: 1rem;
+    object-fit: contain;
+  }
+
+  .sala-image, .pelicula-poster {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 200px;
+    object-fit: contain; 
+  }
+
+  .sala-content {
+  padding: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+  
+.sala-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .stat-item {
+    background: #f1f5f9;
+    padding: 0.5rem;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  
+  .sala-stat {
+    background: #f1f5f9;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+  }
+  
+  /* Tarjetas de películas */
+  .pelicula-card {
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+  
+  .pelicula-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .poster-container {
+    height: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .pelicula-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .pelicula-card:hover .pelicula-poster {
+    transform: scale(1.05);
+  }
+  
+  /* Botones */
+  .delete-button {
+    color: #dc2626 !important;
+    border-color: #dc2626 !important;
+  }
+  
+  .delete-button:hover {
+    background: #fee2e2 !important;
+  }
+  
+  /* Responsive */
+  .responsive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  
+  @media (min-width: 1600px) {
+    .responsive-grid {
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+    
+    .sala-image {
+      height: 120px;
+    }
+    
+    .poster-container {
+      height: 200px;
+    }
+  }
+
+  /* Formularios */
+.form-container {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  .form-input .MuiOutlinedInput-root {
+    border-radius: 8px;
+  }
+  
+  .form-select .MuiSelect-select {
+    padding: 15.5px 14px;
+  }
+  
+  /* Grid de Items */
+  .items-grid {
+    padding: 1rem;
+  }
+  
+  .item-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .item-image-container {
+    height: 300px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .item-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    padding: 1rem;
+  }
+  
+  .item-content {
+    padding: 1.5rem !important;
+  }
+  
+  .item-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  
+  .item-stats span {
+    background: #f1f5f9;
+    padding: 0.5rem;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  
+  /* Botones */
+  .submit-button {
+    background: #3b82f6 !important;
+    padding: 12px 24px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px;
+  }
+  
+  .delete-button {
+    border-color: #ef4444 !important;
+    color: #ef4444 !important;
+    width: 100%;
+    margin-top: 1rem;
+  }

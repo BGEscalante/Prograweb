@@ -1,4 +1,5 @@
-
+import './Login.css';
+import { FiUser, FiLock } from 'react-icons/fi';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api';
@@ -27,21 +28,43 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <h2>Iniciar Sesión</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input placeholder="Usuario"
-               value={username}
-               onChange={e => setUsername(e.target.value)} />
-        <input type="password" placeholder="Contraseña"
-               value={password}
-               onChange={e => setPassword(e.target.value)} />
-        <button type="submit">Entrar</button>
-      </form>
-      <p>
-        ¿No tienes cuenta? <a href="/registro">Regístrate</a>
-      </p>
+    <div className="login-container">
+      <div className="login-card">
+        <h2 className="login-title">Bienvenido</h2>
+        
+        {error && <div className="error-message">{error}</div>}
+
+        <form className="login-form" onSubmit={handleSubmit}>
+          <div className="input-group">
+            <FiUser className="input-icon" size={20} />
+            <input
+              className="login-input"
+              placeholder="Usuario"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+            />
+          </div>
+
+          <div className="input-group">
+            <FiLock className="input-icon" size={20} />
+            <input
+              type="password"
+              className="login-input"
+              placeholder="Contraseña"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+          </div>
+
+          <button type="submit" className="login-button">
+            Ingresar
+          </button>
+        </form>
+
+        <p className="auth-link">
+          ¿No tienes cuenta? <a href="/registro">Crear cuenta</a>
+        </p>
+      </div>
     </div>
   );
 }

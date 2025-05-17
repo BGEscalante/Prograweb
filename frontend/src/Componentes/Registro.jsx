@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api';
+import './Registro.css';
+import { FiUser, FiLock, FiArrowRight } from 'react-icons/fi';
 
 export default function Registro() {
   const [username, setUsername] = useState('');
@@ -21,18 +23,48 @@ export default function Registro() {
   };
 
   return (
-    <div>
-      <h2>Crear Cuenta</h2>
-      {msg && <p>{msg}</p>}
-      <form onSubmit={handleRegistro}>
-        <input placeholder="Usuario"
-               value={username}
-               onChange={e => setUsername(e.target.value)} />
-        <input type="password" placeholder="Contraseña"
-               value={password}
-               onChange={e => setPassword(e.target.value)} />
-        <button type="submit">Registrar</button>
-      </form>
+    <div className="registro-container">
+      <div className="registro-card">
+        <h2 className="registro-title">Crear Cuenta</h2>
+        
+        {msg && (
+          <div className={msg.includes('✓') ? 'success-message' : 'error-message'}>
+            {msg}
+          </div>
+        )}
+
+        <form className="registro-form" onSubmit={handleRegistro}>
+          <div className="input-group">
+            <FiUser className="input-icon" size={20} />
+            <input
+              className="login-input"
+              placeholder="Usuario"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+            />
+          </div>
+
+          <div className="input-group">
+            <FiLock className="input-icon" size={20} />
+            <input
+              type="password"
+              className="login-input"
+              placeholder="Contraseña"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+          </div>
+
+          <button type="submit" className="login-button">
+            <FiArrowRight className="button-icon" />
+            Registrar
+          </button>
+        </form>
+
+        <p className="auth-link">
+          ¿Ya tienes cuenta? <a href="/">Iniciar sesión</a>
+        </p>
+      </div>
     </div>
   );
 }

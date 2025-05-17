@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from 'react';
+import './ClienteDashboard.css';
 
 export default function MisReservaciones() {
   const [reservas, setReservas] = useState([]);
@@ -7,7 +8,7 @@ export default function MisReservaciones() {
 
   useEffect(() => {
     const fetchReservas = async () => {
-      const token = localStorage.getItem('token');            // 1️⃣
+      const token = localStorage.getItem('token');           
       if (!token) {
         setError('No estás autenticado');
         return;
@@ -18,7 +19,7 @@ export default function MisReservaciones() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`              // 2️⃣
+            'Authorization': `Bearer ${token}`              
           }
         });
 
@@ -42,18 +43,28 @@ export default function MisReservaciones() {
 
   return (
     <div>
-      <h3>Mis Reservaciones</h3>
-      {reservas.length === 0
-        ? <p>No tienes reservaciones.</p>
-        : (
-          <ul>
-            {reservas.map(r => (
-              <li key={r.id}>
-                Sala: {r.sala} — Fecha: {r.fecha_reserva} — Asientos: {r.asientos}
-              </li>
-            ))}
-          </ul>
+      <h2 className="section-title">Mis Reservaciones</h2>
+      {error && <div className="error-message">{error}</div>}
+      
+      <div className="reservaciones-list">
+        {reservas.length === 0 ? (
+          <p>No tienes reservaciones activas.</p>
+        ) : (
+          reservas.map(r => (
+            <div key={r.id} className="reservacion-card">
+              <h4>Sala: {r.sala || 'No especificada'}</h4>
+              <p>Fecha: {new Date(r.fecha_reserva).toLocaleDateString()}</p>
+              <p>Asientos: {
+                Array.isArray(r.asientos) 
+                  ? r.asientos.join(', ') 
+                  : typeof r.asientos === 'string' 
+                    ? r.asientos 
+                    : 'No disponible'
+              }</p>
+            </div>
+          ))
         )}
+      </div>
     </div>
   );
 }

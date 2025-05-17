@@ -91,3 +91,43 @@ exports.cancelarReservacion = async (req, res) => {
     res.status(500).json({ error: 'Error al cancelar reserva' });
   }
 };
+
+exports.obtenerDisponibilidad = async (req, res) => {
+  try {
+    const { sala_id, fecha_reserva } = req.body;
+
+    //Recuperamos la configuración de la sala (filas y columnas)
+    const [[sala]] = await db.query(
+      'SELECT filas, columnas FROM Salas WHERE id = ?',
+      [sala_id]
+    );
+    if (!sala) return res.status(404).json({ error: 'Sala no encontrada' });
+
+    const { filas, columnas } = sala;
+
+    //Obténemos los asientos ya reservados en esa fecha
+    const [ocupados] = await db.query(
+      `SELECT A.fila, A.columna
+       FROM AsientosReservados A
+       JOIN Reservaciones R ON A.reservacion_id = R.id
+       WHERE R.sala_id = ? AND R.fecha_reserva = ?`,
+      [sala_id, fecha_reserva]
+    );
+
+    // se construye la matriz de butacas
+    const grid = [];
+    for (let f = 1; f <= filas; f++) {
+      const row = { fila: f, columnas: [] };
+      for (let c = 1; c <= columnas; c++) {
+        const isReserved = ocupados.some(a => a.fila === f && a.columna === c);
+        row.columnas.push({ columna: c, reserved: isReserved });
+      }
+      grid.push(row);
+    }
+
+    res.json(grid);
+  } catch (err) {
+    console.error('Error en obtenerDisponibilidad:', err);
+    res.status(500).json({ error: 'Error al obtener disponibilidad' });
+  }
+};

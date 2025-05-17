@@ -1,0 +1,412 @@
+/* Estilos generales del dashboard */
+.cliente-container {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 100vh;
+    background: #f8fafc;
+    overflow-x: hidden; 
+  }
+  
+  .cliente-sidebar {
+    background: #1a365d;
+    padding: 2rem;
+    position: fixed;
+    width: 280px;
+    height: 100vh;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+  }
+  
+  .cliente-main {
+    padding: 2rem;
+    margin-left: 280px;
+    width: calc(100vw - 280px); 
+    max-width: none; 
+  }
+  
+  .cliente-title {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    justify-content: center;
+  }
+  
+  .cliente-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .cliente-nav-button {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .cliente-nav-button:hover {
+    background: #2d3748;
+    color: #fff;
+  }
+  
+  .cliente-nav-button.active {
+    background: #4299e1;
+    color: #fff;
+  }
+  
+  .logout-link {
+    color: #a0aec0;
+    text-decoration: none;
+    position: absolute;
+    bottom: 2rem;
+    left: 1.5rem;
+    transition: color 0.3s ease;
+  }
+  
+  .logout-link:hover {
+    color: #fff;
+  }
+  
+  /* Estilos reutilizables de ReservarDetalle */
+  .grid-seats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 800px;
+    margin: 1rem 0;
+  }
+  
+  .row-seats {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  
+  .seat {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .seat.available {
+    background: #cbd5e0;
+    border: 2px solid #a0aec0;
+  }
+  
+  .seat.selected {
+    background: #48bb78;
+    border-color: #2f855a;
+  }
+  
+  .seat.reserved {
+    background: #f56565;
+    cursor: not-allowed;
+  }
+  
+  .modal-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-width: 400px;
+    width: 90%;
+  }
+  
+  /* Estilos para Peliculas y MisReservaciones */
+  .peliculas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+  
+  .pelicula-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .pelicula-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .pelicula-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .pelicula-content {
+    padding: 1rem;
+  }
+
+  .contenedor-peliculas {
+    padding: 2rem;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .lista-horizontal {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem 0;
+  }
+  
+  .tarjeta-pelicula {
+    flex: 0 0 300px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .tarjeta-pelicula:hover {
+    transform: translateY(-5px);
+  }
+  
+  .contenedor-poster {
+    height: 400px;
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .poster-pelicula {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .info-pelicula {
+    padding: 1.5rem;
+  }
+  
+  .titulo-pelicula {
+    margin: 0 0 1rem 0;
+    color: #1a365d;
+    font-size: 1.2rem;
+  }
+  
+  .detalles-sala {
+    display: grid;
+    gap: 0.5rem;
+  }
+  
+  .sala-info, .asientos-info {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #4a5568;
+  }
+
+  
+  
+  /* Scroll horizontal en móviles */
+  @media (max-width: 768px) {
+    .lista-horizontal {
+      flex-wrap: nowrap;
+      padding-bottom: 1rem;
+    }
+    
+    .tarjeta-pelicula {
+      flex: 0 0 85vw;
+      margin-right: 1rem;
+    }
+    
+    .contenedor-poster {
+      height: 300px;
+    }
+  }
+  
+  .reservaciones-list {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .reservacion-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  @media (max-width: 768px) {
+    .cliente-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .cliente-sidebar {
+      position: static;
+      width: 100%;
+      height: auto;
+    }
+    
+    .cliente-main {
+      margin-left: 0;
+      width: 100%;
+    }
+    
+    .grid-seats {
+      max-width: 100%;
+    }
+    
+    .seat {
+      width: 25px;
+      height: 25px;
+    }
+  }
+
+  /* Reserva Container */
+.reserva-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .reserva-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Asientos */
+  .seats-container {
+    background: #f8fafc;
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+  }
+  
+  .grid-seats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0 auto;
+    max-width: 500px;
+  }
+  
+  .row-seats {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  
+  .seat {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .seat-legend {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .legend {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    margin-right: 0.5rem;
+  }
+  
+  .legend.available { background: #cbd5e0; border: 1px solid #a0aec0; }
+  .legend.selected { background: #48bb78; }
+  .legend.reserved { background: #f56565; }
+  
+  /* Modal de Pago */
+  .payment-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .payment-details {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    text-align: left;
+  }
+  
+  .payment-form {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .card-input {
+    padding: 0.8rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    width: 100%;
+  }
+  
+  .card-info {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .small-input {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+  }
+  
+  .qr-section {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+  }
+  
+  .modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  
