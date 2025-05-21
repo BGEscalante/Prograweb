@@ -1,8 +1,7 @@
-// src/Componentes/GestionSalas.jsx
 import React, { useEffect, useState } from 'react';
 import {
-  Box, Button, Card, CardContent,
-  Grid, MenuItem, Select, TextField, Typography
+  Box, Button, Dialog, DialogTitle, DialogContent, DialogActions,
+  MenuItem, Select, TextField, Typography
 } from '@mui/material';
 import API from '../api';
 import './AdminDashboard.css';
@@ -10,13 +9,27 @@ import './AdminDashboard.css';
 export default function GestionSalas() {
   const [salas, setSalas] = useState([]);
   const [pelis, setPelis] = useState([]);
-  const [form, setForm] = useState({ nombre:'', pelicula_id:'', filas:'', columnas:'' });
+  const [form, setForm] = useState({ nombre: '', pelicula_id: '', filas: '', columnas: '' });
   const [error, setError] = useState('');
+  const [editingSala, setEditingSala] = useState(null);
+  const [editForm, setEditForm] = useState({ nombre: '', pelicula_id: '', filas: '', columnas: '' });
 
   useEffect(() => {
-    API.get('/salas').then(r=>setSalas(r.data));
-    API.get('/peliculas').then(r=>setPelis(r.data));
+    cargarDatos();
   }, []);
+
+  const cargarDatos = async () => {
+    try {
+      const [salasRes, pelisRes] = await Promise.all([
+        API.get('/salas'),
+        API.get('/peliculas')
+      ]);
+      setSalas(salasRes.data);
+      setPelis(pelisRes.data);
+    } catch (error) {
+      setError('Error al cargar los datos');
+    }
+  };
 
   const crear = async () => {
     setError('');
@@ -34,6 +47,8 @@ export default function GestionSalas() {
         sala_nombre: payload.nombre,
         pelicula_nombre: pelicula.nombre,
         pelicula_imagen_url: pelicula.imagen_url,
+        filas: payload.filas,
+        columnas: payload.columnas,
         disponibles: payload.filas*payload.columnas
       }]);
       setForm({ nombre:'', pelicula_id:'', filas:'', columnas:'' });
@@ -52,6 +67,53 @@ export default function GestionSalas() {
     }
   };
 
+  const abrirEdicion = (sala) => {
+    setEditingSala(sala);
+    setEditForm({
+      nombre: sala.sala_nombre,
+      pelicula_id: pelis.find(p => p.nombre === sala.pelicula_nombre)?.id || '',
+      filas: sala.filas,
+      columnas: sala.columnas
+    });
+  };
+
+  const cerrarEdicion = () => {
+    setEditingSala(null);
+    setEditForm({ nombre:'', pelicula_id:'', filas:'', columnas:'' });
+  };
+
+  const actualizarSala = async () => {
+    setError('');
+    try {
+      const payload = {
+        nombre: editForm.nombre,
+        pelicula_id: Number(editForm.pelicula_id),
+        filas: Number(editForm.filas),
+        columnas: Number(editForm.columnas)
+      };
+      
+      await API.put(`/salas/${editingSala.id}`, payload);
+      
+      const pelicula = pelis.find(p => p.id === payload.pelicula_id);
+      
+      setSalas(salas.map(s => 
+        s.id === editingSala.id ? {
+          ...s,
+          sala_nombre: payload.nombre,
+          pelicula_nombre: pelicula.nombre,
+          pelicula_imagen_url: pelicula.imagen_url,
+          filas: payload.filas,
+          columnas: payload.columnas,
+          disponibles: payload.filas * payload.columnas
+        } : s
+      ));
+      
+      cerrarEdicion();
+    } catch (e) {
+      setError(e.response?.data?.error || 'Error al actualizar sala');
+    }
+  };
+
   return (
     <Box sx={{ 
       width: '100%',
@@ -66,61 +128,59 @@ export default function GestionSalas() {
       {error && <div className="error-message">{error}</div>}
 
       <Box className="gestion-form">
-  {error && <div className="error-message">{error}</div>}
+        <div className="payment-form">
+          <div className="form-group">
+            <TextField
+              label="Nombre de la Sala"
+              value={form.nombre}
+              onChange={e => setForm({...form, nombre: e.target.value})}
+              className="card-input"
+              fullWidth
+            />
+          </div>
 
-  <div className="payment-form">
-    <div className="form-group">
-      <TextField
-        label="Nombre de la Sala"
-        value={form.nombre}
-        onChange={e => setForm({...form, nombre: e.target.value})}
-        className="card-input"
-        fullWidth
-      />
-    </div>
+          <div className="form-group">
+            <Select
+              value={form.pelicula_id}
+              onChange={e => setForm({...form, pelicula_id: e.target.value})}
+              displayEmpty
+              className="card-input"
+              fullWidth
+            >
+              <MenuItem value="" disabled>Seleccione película</MenuItem>
+              {pelis.map(p => (
+                <MenuItem key={p.id} value={p.id}>{p.nombre}</MenuItem>
+              ))}
+            </Select>
+          </div>
 
-    <div className="form-group">
-      <Select
-        value={form.pelicula_id}
-        onChange={e => setForm({...form, pelicula_id: e.target.value})}
-        displayEmpty
-        className="card-input"
-        fullWidth
-      >
-        <MenuItem value="" disabled>Seleccione pelicula</MenuItem>
-        {pelis.map(p => (
-          <MenuItem key={p.id} value={p.id}>{p.nombre}</MenuItem>
-        ))}
-      </Select>
-    </div>
+          <div className="card-info">
+            <TextField
+              label="Filas"
+              type="number"
+              value={form.filas}
+              onChange={e => setForm({...form, filas: e.target.value})}
+              className="small-input"
+            />
+            <TextField
+              label="Columnas"
+              type="number"
+              value={form.columnas}
+              onChange={e => setForm({...form, columnas: e.target.value})}
+              className="small-input"
+            />
+          </div>
 
-    <div className="card-info">
-      <TextField
-        label="Filas"
-        type="number"
-        value={form.filas}
-        onChange={e => setForm({...form, filas: e.target.value})}
-        className="small-input"
-      />
-      <TextField
-        label="Columnas"
-        type="number"
-        value={form.columnas}
-        onChange={e => setForm({...form, columnas: e.target.value})}
-        className="small-input"
-      />
-    </div>
-
-    <Button 
-      variant="contained" 
-      className="primary-button"
-      onClick={crear}
-      fullWidth
-    >
-      Registrar Sala
-    </Button>
-  </div>
-</Box>
+          <Button 
+            variant="contained" 
+            className="primary-button"
+            onClick={crear}
+            fullWidth
+          >
+            Registrar Sala
+          </Button>
+        </div>
+      </Box>
 
       <div className="salas-grid">
         {salas.map(s => (
@@ -160,22 +220,85 @@ export default function GestionSalas() {
                   <div>🎟️ Capacidad</div>
                   <strong>{s.disponibles}</strong>
                 </div>
-                
               </div>
               
-              <Button 
-                className="delete-button"
-                variant="outlined"
-                fullWidth
-                onClick={() => borrar(s.id)}
-                sx={{ mt: 2 }}
-              >
-                Eliminar Sala
-              </Button>
+              <div className="sala-actions">
+                <Button 
+                  className="edit-button"
+                  variant="contained"
+                  fullWidth
+                  onClick={() => abrirEdicion(s)}
+                >
+                  Editar
+                </Button>
+                <Button 
+                  className="delete-button"
+                  variant="outlined"
+                  fullWidth
+                  onClick={() => borrar(s.id)}
+                  sx={{ mt: 1 }}
+                >
+                  Eliminar
+                </Button>
+              </div>
             </div>
           </div>
         ))}
       </div>
+
+      {/* cuadro de edición */}
+      <Dialog open={!!editingSala} onClose={cerrarEdicion} maxWidth="sm" fullWidth>
+        <DialogTitle>Editar Sala</DialogTitle>
+        <DialogContent>
+          <Box sx={{ mt: 2 }}>
+            <TextField
+              label="Nombre de la Sala"
+              value={editForm.nombre}
+              onChange={e => setEditForm({...editForm, nombre: e.target.value})}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            
+            <Select
+              value={editForm.pelicula_id}
+              onChange={e => setEditForm({...editForm, pelicula_id: e.target.value})}
+              displayEmpty
+              fullWidth
+              sx={{ mb: 2 }}
+            >
+              <MenuItem value="" disabled>Seleccione película</MenuItem>
+              {pelis.map(p => (
+                <MenuItem key={p.id} value={p.id}>{p.nombre}</MenuItem>
+              ))}
+            </Select>
+            
+            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+              <TextField
+                label="Filas"
+                type="number"
+                value={editForm.filas}
+                onChange={e => setEditForm({...editForm, filas: e.target.value})}
+                fullWidth
+              />
+              <TextField
+                label="Columnas"
+                type="number"
+                value={editForm.columnas}
+                onChange={e => setEditForm({...editForm, columnas: e.target.value})}
+                fullWidth
+              />
+            </Box>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cerrarEdicion} className="secondary-button">
+            Cancelar
+          </Button>
+          <Button onClick={actualizarSala} className="edit-button">
+            Guardar Cambios
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

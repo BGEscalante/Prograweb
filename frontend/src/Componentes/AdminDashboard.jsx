@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import GestionSalas from './GestionSalas';
 import GestionPeliculas from './GestionPeliculas';
-import { FiSettings, FiFilm, FiLogOut, FiGrid } from 'react-icons/fi';
+import GestionUsuarios from './GestionUsuarios'; 
+import { FiSettings, FiFilm, FiLogOut, FiGrid, FiUsers } from 'react-icons/fi';
 import './AdminDashboard.css';
 
 export default function AdminDashboard() {
@@ -13,7 +14,7 @@ export default function AdminDashboard() {
       <div className="admin-sidebar">
         <h2 className="admin-title">
           <FiSettings size={24} />
-          Panel Admin
+          Panel Administrador
         </h2>
         
         <nav className="admin-nav">
@@ -32,6 +33,15 @@ export default function AdminDashboard() {
             <FiFilm size={20} />
             Gestionar Películas
           </button>
+
+          <button 
+            className={`nav-button ${view === 'usuarios' ? 'active' : ''}`}
+            onClick={() => setView('usuarios')}
+        >
+            <FiUsers size={20} />
+            Gestionar Usuarios
+          </button>
+
         </nav>
         
         <Link to="/" className="logout-link">
@@ -44,6 +54,7 @@ export default function AdminDashboard() {
         <div className="dashboard-content">
           {view === 'salas' && <GestionSalas />}
           {view === 'peliculas' && <GestionPeliculas />}
+          {view === 'usuarios' && <GestionUsuarios />}
         </div>
       </div>
     </div>

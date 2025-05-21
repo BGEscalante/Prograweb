@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Card, CardContent, Grid, TextField, Typography } from '@mui/material';
+import {
+  Box, Button, Card, CardContent, Dialog,
+  DialogTitle, DialogContent, DialogActions,
+  Grid, TextField, Typography
+} from '@mui/material';
 import API from '../api';
 import './AdminDashboard.css';
 
@@ -7,6 +11,8 @@ export default function GestionPeliculas() {
   const [peliculas, setPeliculas] = useState([]);
   const [form, setForm] = useState({ nombre: '', imagen_url: '' });
   const [error, setError] = useState('');
+  const [editingPelicula, setEditingPelicula] = useState(null);
+  const [editForm, setEditForm] = useState({ nombre: '', imagen_url: '' });
 
   useEffect(() => {
     cargarPeliculas();
@@ -28,6 +34,13 @@ export default function GestionPeliculas() {
     });
   };
 
+  const handleEditChange = (e) => {
+    setEditForm({
+      ...editForm,
+      [e.target.name]: e.target.value
+    });
+  };
+
   const handleCrear = async () => {
     setError('');
     if (!form.nombre || !form.imagen_url) {
@@ -37,9 +50,8 @@ export default function GestionPeliculas() {
 
     try {
       await API.post('/peliculas', form);
-      await cargarPeliculas(); // Recargar datos actualizados
+      await cargarPeliculas();
       setForm({ nombre: '', imagen_url: '' });
-
     } catch (err) {
       setError(err.response?.data?.error || 'Error al crear película');
     }
@@ -51,6 +63,35 @@ export default function GestionPeliculas() {
       setPeliculas(peliculas.filter(p => p.id !== id));
     } catch (err) {
       setError('Error al eliminar película');
+    }
+  };
+
+  const abrirEdicion = (pelicula) => {
+    setEditingPelicula(pelicula);
+    setEditForm({
+      nombre: pelicula.nombre,
+      imagen_url: pelicula.imagen_url
+    });
+  };
+
+  const cerrarEdicion = () => {
+    setEditingPelicula(null);
+    setEditForm({ nombre: '', imagen_url: '' });
+  };
+
+  const handleActualizar = async () => {
+    setError('');
+    if (!editForm.nombre || !editForm.imagen_url) {
+      setError('Todos los campos son requeridos');
+      return;
+    }
+
+    try {
+      await API.put(`/peliculas/${editingPelicula.id}`, editForm);
+      await cargarPeliculas();
+      cerrarEdicion();
+    } catch (err) {
+      setError(err.response?.data?.error || 'Error al actualizar película');
     }
   };
 
@@ -85,6 +126,7 @@ export default function GestionPeliculas() {
           variant="contained" 
           className="submit-button"
           onClick={handleCrear}
+          fullWidth
         >
           Crear Nueva Película
         </Button>
@@ -107,21 +149,74 @@ export default function GestionPeliculas() {
               </div>
               
               <CardContent className="item-content">
-                <Typography variant="h6">{p.nombre}</Typography>
+                <Typography variant="h6" className="pelicula-title">
+                  {p.nombre}
+                </Typography>
                 
-                <Button 
-                  variant="outlined" 
-                  color="error"
-                  className="delete-button"
-                  onClick={() => handleBorrar(p.id)}
-                >
-                  Eliminar
-                </Button>
+                <div className="pelicula-actions">
+                  <Button 
+                    variant="contained"
+                    className="edit-button"
+                    onClick={() => abrirEdicion(p)}
+                    fullWidth
+                  >
+                    Editar
+                  </Button>
+                  <Button 
+                    variant="outlined"
+                    className="delete-button"
+                    onClick={() => handleBorrar(p.id)}
+                    fullWidth
+                  >
+                    Eliminar
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
+
+      {/* Cuadro de edición */}
+      <Dialog 
+        open={!!editingPelicula} 
+        onClose={cerrarEdicion} 
+        className="edit-dialog"
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle className="dialog-title">
+          Editar Película: {editingPelicula?.nombre}
+        </DialogTitle>
+        <DialogContent className="dialog-content">
+          <TextField
+            name="nombre"
+            label="Título de la película"
+            value={editForm.nombre}
+            onChange={handleEditChange}
+            className="dialog-input"
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+
+          <TextField
+            name="imagen_url"
+            label="URL del póster"
+            value={editForm.imagen_url}
+            onChange={handleEditChange}
+            className="dialog-input"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions className="dialog-actions">
+          <Button onClick={cerrarEdicion} className="secondary-button">
+            Cancelar
+          </Button>
+          <Button onClick={handleActualizar} className="submit-button">
+            Guardar Cambios
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
