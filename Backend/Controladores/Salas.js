@@ -1,5 +1,11 @@
 const db = require('../Conexion/db');
 
+
+/**
+ * POST /salas | Crea nueva sala (admin). 
+ * Recibe {nombre, pelicula_id, filas, columnas}. 
+ * Retorna ID de sala (201) o error (500).
+ */
 exports.crearSala = async (req, res) => {
   try {
     const { nombre, pelicula_id, filas, columnas } = req.body;
@@ -16,12 +22,20 @@ exports.crearSala = async (req, res) => {
   }
 };
 
+
+/**
+ * GET /salas | Lista salas con disponibilidad calculada. 
+ * Retorna JSON con datos de salas y películas (200) 
+ * o error (500).
+ */
 exports.obtenerSalas = async (req, res) => {
   try {
     const [salas] = await db.query(`
       SELECT
         S.id,
         S.nombre               AS sala_nombre,
+        S.filas               AS filas,
+        S.columnas             AS columnas,
         P.nombre               AS pelicula_nombre,
         P.imagen_url           AS pelicula_imagen_url,
         (S.filas * S.columnas) - IFNULL(reservas.cant, 0) AS disponibles
@@ -41,6 +55,11 @@ exports.obtenerSalas = async (req, res) => {
   }
 };
 
+/**
+ * GET /salas | Lista salas con disponibilidad calculada. 
+ * Retorna JSON con datos de salas y películas (200) 
+ * o error (500).
+ */
 exports.actualizarSala = async (req, res) => {
   try {
     const { id } = req.params;
@@ -58,6 +77,10 @@ exports.actualizarSala = async (req, res) => {
   }
 };
 
+/**
+ * DELETE /salas/:id | Elimina sala sin reservas activas (admin). 
+ * Retorna confirmación (200) o error (400/500).
+ */
 exports.eliminarSala = async (req, res) => {
   try {
     const { id } = req.params;

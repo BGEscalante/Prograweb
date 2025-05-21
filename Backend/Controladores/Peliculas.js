@@ -1,5 +1,10 @@
 const db = require('../Conexion/db');
 
+/**
+ * POST /peliculas | Crea nueva película (admin). 
+ * Recibe {nombre, imagen_url} en body. 
+ * Retorna ID de película creada (201) o error (500).
+ */
 exports.crearPelicula = async (req, res) => {
   try {
     const { nombre, imagen_url } = req.body;
@@ -17,6 +22,11 @@ exports.crearPelicula = async (req, res) => {
   }
 };
 
+/**
+ * GET /peliculas | Obtiene todas las películas. 
+ * No requiere parámetros. Retorna lista JSON (200) 
+ * o error en consulta (500).
+ */
 exports.obtenerPeliculas = async (req, res) => {
   try {
     const [pelis] = await db.query(
@@ -29,6 +39,11 @@ exports.obtenerPeliculas = async (req, res) => {
   }
 };
 
+/**
+ * PUT /peliculas/:id | Actualiza película por ID (admin). 
+ * Recibe {nombre, imagen_url} en body. 
+ * Retorna confirmación (200) o error (500/404).
+ */
 exports.actualizarPelicula = async (req, res) => {
   try {
     const { id } = req.params;
@@ -44,6 +59,11 @@ exports.actualizarPelicula = async (req, res) => {
   }
 };
 
+/**
+ * DELETE /peliculas/:id | Elimina película por ID (admin). 
+ * Valida existencia previa. 
+ * Retorna confirmación (200) o error (500/404).
+ */
 exports.eliminarPelicula = async (req, res) => {
   try {
     const { id } = req.params;

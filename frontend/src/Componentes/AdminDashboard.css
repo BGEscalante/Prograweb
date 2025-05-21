@@ -168,7 +168,112 @@
     font-size: 0.875rem;
   }
   
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
   
+  .edit-button {
+    background-color: #3b82f6 !important;
+    color: white !important;
+  }
+  
+  .sala-actions {
+    margin-top: 1.5rem;
+  }
+  
+  .secondary-button {
+    color: #64748b !important;
+    border-color: #64748b !important;
+  }
+  
+  .secondary-button:hover {
+    background-color: #f1f5f9 !important;
+  }
+
+  /* Estilos para el diálogo de edición */
+.edit-dialog {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .dialog-title {
+    padding: 1.5rem 1.5rem 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e293b;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .dialog-content {
+    padding: 1.5rem;
+  }
+  
+  .dialog-actions {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+  
+  .dialog-input .MuiOutlinedInput-root,
+  .dialog-select .MuiOutlinedInput-root {
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  .dialog-row {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .dialog-number-input {
+    flex: 1;
+  }
+  
+  .dialog-number-input .MuiOutlinedInput-root {
+    border-radius: 8px;
+  }
+  
+  /* Estilos específicos para el formulario de salas */
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .form-number-input {
+    flex: 1;
+  }
+  
+  .form-number-input .MuiOutlinedInput-root {
+    border-radius: 8px;
+  }
+  
+  /* Mejoras para las tarjetas de sala */
+  .sala-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+  
+  .sala-subtitle {
+    color: #64748b;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .sala-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
   
   /* Estilos específicos para películas */
   .peliculas-grid {
@@ -338,6 +443,65 @@
   .pelicula-card:hover .pelicula-poster {
     transform: scale(1.05);
   }
+
+  /* Estilos específicos para gestión de películas */
+.pelicula-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1rem;
+    text-align: center;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .pelicula-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  
+  .item-image-container {
+    height: 350px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .item-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  
+  /* Mejoras para el grid de películas */
+  .items-grid {
+    padding: 1rem 0;
+  }
+  
+  .item-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .item-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
   
   /* Botones */
   .delete-button {
@@ -455,4 +619,35 @@
     color: #ef4444 !important;
     width: 100%;
     margin-top: 1rem;
+  }
+
+  /* Estilos para gestión de usuarios */
+.tabla-usuarios {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-top: 2rem;
+    overflow: hidden;
+  }
+  
+  .tabla-usuarios th {
+    background: #f8fafc;
+    font-weight: 600;
+  }
+  
+  .estado {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    display: inline-block;
+  }
+  
+  .estado.activo {
+    background: #c6f6d5;
+    color: #22543d;
+  }
+  
+  .estado.inactivo {
+    background: #fed7d7;
+    color: #c53030;
   }

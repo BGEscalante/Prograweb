@@ -5,6 +5,12 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET; 
 
 // Registro
+/**
+ * POST /registro | Crea nuevo usuario en sistema.
+ * Recibe {username, password} en body. Hashea contraseña.
+ * Retorna éxito (201) o error de BD (500).
+ */
+
 const registroUser = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -21,17 +27,32 @@ const registroUser = async (req, res) => {
 };
 
 // Login
+/**
+ * POST /login | Autentica usuario existente.
+ * Recibe {username, password} en body. Verifica credenciales.
+ * Retorna token JWT (200), error de credenciales (401) o error servidor (500).
+ */
 const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
+    
+    // Paso 1: Buscar usuario incluyendo el campo 'activo'
     const [rows] = await db.query(
       'SELECT * FROM Usuarios WHERE username = ?',
       [username]
     );
+    
     if (rows.length === 0) {
       return res.status(401).json({ error: 'Usuario no encontrado' });
     }
+    
     const user = rows[0];
+    
+    // Paso 2: Verificar si está desactivado
+    if (!user.activo) {
+      return res.status(401).json({ error: 'Usuario desactivado' });
+    }
+
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) {
       return res.status(401).json({ error: 'Contraseña incorrecta' });

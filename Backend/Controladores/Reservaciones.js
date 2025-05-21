@@ -1,5 +1,10 @@
 const db = require('../Conexion/db');
 
+/**
+ * POST /reservas | Crea reservación verificando asientos. 
+ * Recibe {sala_id, fecha_reserva, asientos[]} en body. 
+ * Retorna éxito (201) o asientos ocupados (400).
+ */
 exports.crearReservacion = async (req, res) => {
   try {
     const { sala_id, fecha_reserva, asientos } = req.body;
@@ -47,6 +52,11 @@ exports.crearReservacion = async (req, res) => {
   }
 };
 
+/**
+ * GET /reservas | Lista reservaciones del usuario. 
+ * Usa user.id del token. Retorna JSON con sala 
+ * y asientos (200) o error (500).
+ */
 exports.obtenerReservaciones = async (req, res) => {
   try {
    const [reservas] = await db.query(`
@@ -72,6 +82,11 @@ exports.obtenerReservaciones = async (req, res) => {
   }
 };
 
+/**
+ * DELETE /reservas/:id | Cancela reservación. 
+ * Valida propiedad (usuario o admin). 
+ * Retorna confirmación (200) o error (403/404).
+ */
 exports.cancelarReservacion = async (req, res) => {
   try {
     const { id } = req.params;
@@ -92,6 +107,12 @@ exports.cancelarReservacion = async (req, res) => {
   }
 };
 
+
+/**
+ * POST /reservas/disponibilidad | Consulta disponibilidad. 
+ * Recibe {sala_id, fecha_reserva}. Retorna grid de asientos 
+ * con estado (200) o error (404/500).
+ */
 exports.obtenerDisponibilidad = async (req, res) => {
   try {
     const { sala_id, fecha_reserva } = req.body;

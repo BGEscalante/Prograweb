@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import API from '../api';
 import { QRCodeCanvas } from 'qrcode.react';
+import { CircularProgress } from '@mui/material';
 import './ClienteDashboard.css';
 
 export default function ReservaDetalle() {
@@ -15,6 +16,7 @@ export default function ReservaDetalle() {
   const [showPayment, setShowPayment] = useState(false);
   const [qrData, setQrData] = useState('');
   const [isPaying, setIsPaying] = useState(false);
+  const [showQR, setShowQR] = useState(false);
 
   useEffect(() => {
     const hoy = new Date();
@@ -47,27 +49,45 @@ export default function ReservaDetalle() {
   const handlePayment = async () => {
     setIsPaying(true);
     try {
+      // Simular validación de tarjeta
+      if (
+        !document.querySelector('.card-input').value.match(/^\d{16}$/) ||
+        !document.querySelector('.small-input[placeholder="MM/AA"]').value.match(/^\d{2}\/\d{2}$/) ||
+        !document.querySelector('.small-input[placeholder="CVV"]').value.match(/^\d{3}$/)
+      ) {
+        throw new Error('Datos de tarjeta inválidos');
+      }
+  
+      // Simular tiempo de procesamiento
+      await new Promise(resolve => setTimeout(resolve, 1500));
+  
+      // Crear reserva
       const res = await API.post('/reservas', {
         sala_id: salaId,
         fecha_reserva: fecha,
         asientos: selected
       });
-      
+  
+      // Generar QR
       setQrData(JSON.stringify({
         reservaId: res.data.id,
         sala: salaId,
         fecha,
         asientos: selected
       }));
-      
-      // Simular pago exitoso
+  
+      // Cerrar modal de pago y mostrar QR
+      setShowPayment(false);
+      setShowQR(true);
+  
+      // Redirigir después de 8 segundos
       setTimeout(() => {
-        setShowPayment(false);
+        setShowQR(false);
         navigate('/cliente', { state: { reservationSuccess: true } });
-      }, 2000);
-
+      }, 8000);
+  
     } catch (e) {
-      setMsg(e.response?.data?.error || 'Error en el pago');
+      setMsg(e.response?.data?.error || e.message || 'Error en el pago');
     } finally {
       setIsPaying(false);
     }
@@ -143,48 +163,92 @@ export default function ReservaDetalle() {
       </div>
 
       {showPayment && (
-        <div className="payment-modal">
-          <div className="modal-content">
-            <h3>Confirmación de Pago</h3>
-            
-            <div className="payment-details">
-              <p>Sala: {salaId}</p>
-              <p>Fecha: {new Date(fecha).toLocaleDateString()}</p>
-              <p>Asientos: {selected.map(a => `${a.fila}-${a.columna}`).join(', ')}</p>
-            </div>
+  <div className="payment-modal">
+    <div className="modal-content">
+      <h3>Confirmación de Pago</h3>
+      
+      <div className="payment-details">
+        <p>Sala: {salaId}</p>
+        <p>Fecha: {new Date(fecha).toLocaleDateString()}</p>
+        <p>Asientos: {selected.map(a => `${a.fila}-${a.columna}`).join(', ')}</p>
+        <p>Total: Q{selected.length * 12}.00</p>
+      </div>
 
-            <div className="payment-form">
-              <input type="text" placeholder="Número de tarjeta" className="card-input" />
-              <div className="card-info">
-                <input type="text" placeholder="MM/AA" className="small-input" />
-                <input type="text" placeholder="CVV" className="small-input" />
-              </div>
-            </div>
-
-            <div className="qr-section">
-              <QRCodeCanvas value={qrData} size={128} />
-              <p>Escanea el QR para verificar</p>
-            </div>
-
-            <div className="modal-actions">
-              <button 
-                className="secondary-button" 
-                onClick={() => setShowPayment(false)}
-                disabled={isPaying}
-              >
-                Cancelar
-              </button>
-              <button 
-                className="primary-button" 
-                onClick={handlePayment}
-                disabled={isPaying}
-              >
-                {isPaying ? 'Procesando...' : 'Confirmar Pago'}
-              </button>
-            </div>
-          </div>
+      <div className="payment-form">
+        <input 
+          type="text" 
+          placeholder="Número de tarjeta" 
+          className="card-input"
+          maxLength="16"
+        />
+        <div className="card-info">
+          <input 
+            type="text" 
+            placeholder="MM/AA" 
+            className="small-input"
+            maxLength="5"
+          />
+          <input 
+            type="text" 
+            placeholder="CVV" 
+            className="small-input"
+            maxLength="3"
+          />
         </div>
-      )}
+      </div>
+
+      <div className="modal-actions">
+        <button 
+          className="secondary-button" 
+          onClick={() => setShowPayment(false)}
+          disabled={isPaying}
+        >
+          Cancelar
+        </button>
+        <button 
+          className="primary-button" 
+          onClick={handlePayment}
+          disabled={isPaying}
+        >
+          {isPaying ? (
+            <><CircularProgress size={20} /> Procesando...</>
+          ) : 'Confirmar Pago'}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+    {showQR && (
+      <div className="qr-modal">
+        <div className="modal-content">
+          <h3>¡Pago Completado!</h3>
+          <p className="success-message">✔️ Tu reserva fue exitosa</p>
+          
+          <div className="qr-instructions">
+            <p>Guarda este QR para acceder a la función:</p>
+            <div className="qr-container">
+              <QRCodeCanvas 
+                value={qrData} 
+                size={200}
+                includeMargin={true}
+              />
+            </div>
+            <p className="timer-text">Redirigiendo en 8 segundos...</p>
+          </div>
+
+          <button
+            className="primary-button"
+            onClick={() => {
+              setShowQR(false);
+              navigate('/cliente');
+            }}
+          >
+            Finalizar
+          </button>
+        </div>
+      </div>
+    )}
     </div>
   );
 }

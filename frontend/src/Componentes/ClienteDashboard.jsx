@@ -13,7 +13,7 @@ export default function ClientDashboard() {
   return (
     <div className="cliente-container">
       <div className="cliente-sidebar">
-        <h2 className="cliente-title">CineApp</h2>
+        <h2 className="cliente-title">CinePo-lis</h2>
         <nav className="cliente-nav">
           <button 
             className={`cliente-nav-button ${view === 'peliculas' ? 'active' : ''}`}

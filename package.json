@@ -4,7 +4,14 @@
   "description": "Proyecto de gestion de reservacion de asientos en salas de cine ",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env NODE_ENV=test jest --detectOpenHandles --forceExit",
+    "test:watch": "npm run test -- --watchAll"
+  },"jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/Conexion/"
+    ]
   },
   "author": "bgesc",
   "license": "ISC",
@@ -15,6 +22,14 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
-    "mysql2": "^3.14.0"
+    "mysql2": "^3.14.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@jest-mock/express": "^3.0.0",
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "supertest": "^7.1.1"
   }
 }
